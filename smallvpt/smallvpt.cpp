@@ -117,9 +117,8 @@ Vec radiance(const Ray &r, int depth) {
 	else
 		if (!intersect(r, t, id)) return Vec();
 	const Sphere &obj = spheres[id];        // the hit object
-	Vec x=r.o+r.d*t, n=(x-obj.p).norm(), nl=n.dot(r.d)<0?n:n*-1, f=obj.c,Le=obj.e;
-	if (n.dot(nl) > 0 || obj.refl != REFR) { f = f * absorption; Le = Le * absorption; }// no absorption inside glass
-	else scaleBy = 1.0;
+	Vec x=r.o+r.d*t, n=(x-obj.p).norm(), nl=n.dot(r.d)<0?n:n*-1;
+	Vec f=obj.c*absorption, Le=obj.e*absorption; // Scale throughout by volume absorption
 	double p = f.x>f.y && f.x>f.z ? f.x : f.y>f.z ? f.y : f.z; // max refl
 	if (++depth>5) if (XORShift::frand()<p) {f=f*(1/p);} else return Le; //R.R.
 	if (obj.refl == DIFF) {                  // Ideal DIFFUSE reflection
