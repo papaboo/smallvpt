@@ -121,7 +121,7 @@ Vec radiance(const Ray &r, int depth) {
 	if (n.dot(nl) > 0 || obj.refl != REFR) { f = f * absorption; Le = Le * absorption; }// no absorption inside glass
 	else scaleBy = 1.0;
 	double p = f.x>f.y && f.x>f.z ? f.x : f.y>f.z ? f.y : f.z; // max refl
-	if (++depth>5) if (XORShift::frand()<p) {f=f*(1/p);} else return Vec(); //R.R.
+	if (++depth>5) if (XORShift::frand()<p) {f=f*(1/p);} else return Le; //R.R.
 	if (obj.refl == DIFF) {                  // Ideal DIFFUSE reflection
 		double r1=2*M_PI*XORShift::frand(), r2=XORShift::frand(), r2s=sqrt(r2);
 		Vec w=nl, u=((fabs(w.x)>.1?Vec(0,1):Vec(1))%w).norm(), v=w%u;
